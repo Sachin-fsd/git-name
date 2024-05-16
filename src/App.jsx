@@ -66,6 +66,9 @@ function App() {
         // data-testid="loader"
       /> */}
       <input type="text" placeholder='Enter Location' value={location} onChange={(e) => setLocation(e.target.value)} />
+      <div>
+        <button onClick={() => setPage(page + 1)}>Next</button>
+      </div>
       <h1>Users</h1>
       <div className="feeds" id="feeds">
         {data.map((post, index) => {
