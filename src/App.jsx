@@ -16,10 +16,13 @@ function App() {
   const [data, setData] = useState([])
   const [page, setPage] = useState(1);
   const [location,setLocation] = useState("Delhi")
+  const [name,setName] = useState("")
+  const [language,setLanguage] = useState("")
+  const [total,setTotal] = useState(0)
   // Function to fetch users based on location
-  function fetchUsersByLocation(location, page) {
+  function fetchUsersByLocation(location,language, page) {
     // GitHub Search API endpoint
-    const api = `https://api.github.com/search/users?q=location:${location}&page=${page}`;
+    const api = `https://api.github.com/search/users?q=location:${location}+language:${language}&page=${page}`
 
 
     // Use Fetch API to get users
@@ -32,6 +35,7 @@ function App() {
       })
       .then(data => {
         console.log(data);
+        setTotal(data.total_count)
         setData(data.items)
         // 'data' contains an array of users who have set their location to the specified value
         // You can loop through the array and display the user details on your website
@@ -40,15 +44,61 @@ function App() {
         console.error('Error:', error);
       });
   }
+  function fetchUsersByName(username, page) {
+    // GitHub Search API endpoint
+    const api = `https://api.github.com/search/users?q=${username}&page=${page}`;
 
-  // Call the function with a location
-  // fetchUsersByLocation('San Francisco');
+    // Use Fetch API to get users
+    fetch(api)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`GitHub API responded with ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+        setTotal(data.total_count)
+
+        setData(data.items)
+        // 'data' contains an array of users who have the specified username
+        // You can loop through the array and display the user details on your website
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+  function fetchUserByUsername(username) {
+    // GitHub API endpoint
+    const api = `https://api.github.com/users/${username}`;
+
+    // Use Fetch API to get user
+    fetch(api)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`GitHub API responded with ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+        setData([data])
+
+        // 'data' contains the user who has the specified username
+        // You can display the user details on your website
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+
   useEffect(() => {
     fetchUsersByLocation('Delhi',page);
   }, [])
   useEffect(() => {
     fetchUsersByLocation(location,page);
-  }, [page,location])
+  }, [page])
+  
 
   return (
     <div>
@@ -65,10 +115,14 @@ function App() {
         // aria-label="Loading Spinner"
         // data-testid="loader"
       /> */}
-      <input type="text" placeholder='Enter Location' value={location} onChange={(e) => setLocation(e.target.value)} />
+      <input type="text" value={location} placeholder='Enter Location' onChange={(e)=>setLocation(e.target.value)}/> <button onClick={()=>fetchUsersByLocation(location,language,page)}> Search</button> <br/>
+      <input type="text" placeholder='Enter Language' onChange={(e)=>setLanguage(e.target.value)}/> <button onClick={()=>fetchUsersByLocation(location,language,page)}> Search</button> <br/>
+      <input type="text" placeholder='Enter Name' onChange={(e)=>setName(e.target.value)}/><button onClick={()=>fetchUsersByName(name,page)}> Search</button> <br/>
+      <input type="text" placeholder='Enter UserName' onChange={(e)=>setName(e.target.value)}/><button onClick={()=>fetchUserByUsername(name)}> Search</button>
       <div>
         <button onClick={() => setPage(page + 1)}>Next</button>
       </div>
+      <p>Total Results: {total}</p>
       <h1>Users</h1>
       <div className="feeds" id="feeds">
         {data.map((post, index) => {
