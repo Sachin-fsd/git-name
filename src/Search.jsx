@@ -12,9 +12,7 @@ const override = {
 };
 function Search() {
     const navigate = useNavigate()
-    const notify = () => toast("Wow so easy!");
     let [loading, setLoading] = useState(true);
-    let [color, setColor] = useState("#ffffff");
     const [data, setData] = useState([])
     const [page, setPage] = useState(1);
     const [location, setLocation] = useState("Delhi")
@@ -23,11 +21,10 @@ function Search() {
     const [total, setTotal] = useState(0)
     // Function to fetch users based on location
     function fetchUsersByLocation(location, page) {
-        setLoading(true)
+        setLoading(true);
         toast("Wait...!")
         // GitHub Search API endpoint
         const api = `https://api.github.com/search/users?q=location:${location}+&page=${page}`
-
 
         // Use Fetch API to get users
         fetch(api)
@@ -48,7 +45,7 @@ function Search() {
                 console.error('Error:', error);
             });
         // const data = JSON.parse(localStorage.getItem("data"));
-        // // data.push(data)
+        // data.push(data)
         // console.log(data)
         // setTotal(data.length);
         // setData(data);
@@ -103,26 +100,32 @@ function Search() {
     //     });
     // }
 
-    useEffect(() => {
-        // localStorage.getItem("loggedIn") ? fetchUsersByLocation('Delhi', page) : navigate("/login")
-        fetchUsersByLocation('Delhi', page)
+    // useEffect(() => {
+    //     // localStorage.getItem("loggedIn") ? fetchUsersByLocation('Delhi', page) : navigate("/login")
+    //     fetchUsersByLocation('Delhi', page)
 
-    }, [])
+    // }, [])
     useEffect(() => {
-        // toast("Wait...!")
         fetchUsersByLocation(location, page);
     }, [page])
-
 
     return (
         <div className='content'>
             <h1>Search Github Users by Location</h1>
             <input
                 className='input'
-                type="text" value={location} placeholder='Enter Location' onChange={(e) => setLocation(e.target.value)} />
+                type="text" value={location} placeholder='Enter Location' onChange={(e) => setLocation(e.target.value)}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      setPage(1); // Reset page on Enter
+                    }
+                  }}
+                />
             <button
                 className='btn btn-primary'
-                onClick={() => fetchUsersByLocation(location, page)}> Search</button> <br />
+                onClick={() => setPage(1)}
+                
+            > Search</button> <br />
             <div>
                 {page > 1 && <button
                     className='btn'
@@ -130,10 +133,9 @@ function Search() {
                 </button>
                 }
 
-                <button
-                    className='btn'
-                    onClick={() => setPage(page + 1)}>Next
-                </button>
+                {
+                    total / 30 > 1 && <button onClick={() => setPage(page + 1)}>Next</button>
+                }
 
             </div>
             {/* <p>Total Results: {total}</p> */}
@@ -175,19 +177,18 @@ function Search() {
                     onClick={() => setPage(page - 1)}>Previous
                 </button>
                 }
+                {
+                    total / 30 > 1 && <button onClick={() => setPage(page + 1)}>Next</button>
+                }
 
-                <button onClick={() => setPage(page + 1)}>Next</button>
             </div>
             <div className='pagination'>
                 {
                     [...Array(Math.ceil(total / 30))].map((item, index) => {
-                        if(index+1<35){
-                            return <button onClick={() => setPage(index + 1)} className={`page-no ${page === index + 1 ? "active" : ""}`}>{index + 1}</button>
+                        if (index + 1 < 35) {
+                            return <button key={index} onClick={() => setPage(index + 1)} className={`page-no ${page === index + 1 ? "active" : ""}`}>{index + 1}</button>
                         }
                     })
-                    // [...Array(Math.ceil(total / 30))].map((item, index) => {
-                    //     return <span className='page-no'>{index + 1}</span>
-                    // })
                 }
             </div>
         </div>
