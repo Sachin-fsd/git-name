@@ -99,7 +99,8 @@ function Search() {
     // }
 
     useEffect(() => {
-        localStorage.getItem("loggedIn") ? fetchUsersByLocation('Delhi', page) : navigate("/login")
+        // localStorage.getItem("loggedIn") ? fetchUsersByLocation('Delhi', page) : navigate("/login")
+        fetchUsersByLocation('Delhi', page)
 
     }, [])
     useEffect(() => {

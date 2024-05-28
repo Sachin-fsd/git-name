@@ -1,15 +1,16 @@
 
 export async function signInAccount({ email, password }) {
     try {
-        const session = await fetch(`http://localhost:8080/login`, {
+        alert(JSON.stringify({email,password}))
+        const session = await fetch(`https://conference-pkoe.onrender.com/login`, {
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({ email, password }),
             method: "POST",
-            credentials: 'include'
+            // credentials: 'include'
         })
-        console.log(session)
+        alert(JSON.stringify(session))
         const ans = await session.json();
         console.log(ans)
         if (session.ok) {
