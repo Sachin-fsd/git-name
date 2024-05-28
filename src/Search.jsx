@@ -39,14 +39,19 @@ function Search() {
             })
             .then(data => {
                 console.log(data);
-                setTotal(data.total_count)
-                setData(data.items)
+                setTotal(data.total_count);
+                setData(data.items);
                 // 'data' contains an array of users who have set their location to the specified value
                 // You can loop through the array and display the user details on your website
             })
             .catch(error => {
                 console.error('Error:', error);
             });
+        // const data = JSON.parse(localStorage.getItem("data"));
+        // // data.push(data)
+        // console.log(data)
+        // setTotal(data.length);
+        // setData(data);
         setLoading(false)
 
     }
@@ -119,11 +124,30 @@ function Search() {
                 className='btn btn-primary'
                 onClick={() => fetchUsersByLocation(location, page)}> Search</button> <br />
             <div>
+                {page > 1 && <button
+                    className='btn'
+                    onClick={() => setPage(page - 1)}>Previous
+                </button>
+                }
+
                 <button
                     className='btn'
-                    onClick={() => setPage(page + 1)}>Next</button>
+                    onClick={() => setPage(page + 1)}>Next
+                </button>
+
             </div>
-            <p>Total Results: {total}</p>
+            {/* <p>Total Results: {total}</p> */}
+            {/* <div className='filter'>
+                <div className='gender'>
+                    <label>Sort By Gender: </label>
+                    <select>
+                        <option value="all">All</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+
+                    </select>
+                </div>
+            </div> */}
             <h1>Users</h1>
             {
                 loading ?
@@ -136,7 +160,7 @@ function Search() {
                                     {/* <Link to={post.html_url}> */}
                                     <a href={post.html_url} target='blank'>
 
-                                        <h2>Name: {post.login}</h2>
+                                        <h2>{post.login}</h2>
                                     </a>
                                     {/* </Link> */}
                                     <img src={post.avatar_url} className='profile-photo' />
@@ -146,7 +170,25 @@ function Search() {
                     </div>
             }
             <div>
+                {page > 1 && <button
+                    className='btn'
+                    onClick={() => setPage(page - 1)}>Previous
+                </button>
+                }
+
                 <button onClick={() => setPage(page + 1)}>Next</button>
+            </div>
+            <div className='pagination'>
+                {
+                    [...Array(Math.ceil(total / 30))].map((item, index) => {
+                        if(index+1<35){
+                            return <button onClick={() => setPage(index + 1)} className={`page-no ${page === index + 1 ? "active" : ""}`}>{index + 1}</button>
+                        }
+                    })
+                    // [...Array(Math.ceil(total / 30))].map((item, index) => {
+                    //     return <span className='page-no'>{index + 1}</span>
+                    // })
+                }
             </div>
         </div>
     );

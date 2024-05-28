@@ -117,3 +117,30 @@ a {
 .login{
   text-align: center;
 }
+.page-no{
+  /* height: 30px;
+  width: 30px; */
+  min-width: 30px;
+  border: 1px solid grey;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.pagination{
+  /* border: 1px solid grey; */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-height: 200px;
+  overflow-y: scroll;
+  margin:10px 0 20px 0;
+}
+.pagination .active{
+  /* background-color: var(--color-gray); */
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
