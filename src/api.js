@@ -13,6 +13,7 @@ export async function signInAccount({ email, password }) {
         console.log(ans)
         if (session.ok) {
             localStorage.setItem("loggedIn", true)
+            localStorage.setItem("user",email)
         } else {
            return false
         }
