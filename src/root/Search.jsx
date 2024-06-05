@@ -48,6 +48,10 @@ function Search() {
         fetchUsersByName(name, page);
     }, [page])
 
+    useEffect(()=>{
+        localStorage.getItem("loggedIn") ? fetchUsersByName(name, page) : navigate("/login")
+    },[])
+
     return (
         <div className='content'>
             <h1>Search Github Users by Name</h1>
